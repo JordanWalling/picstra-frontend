@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../CreatePostForm/CreatePostForm.scss";
 function CreatePostForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -9,7 +10,7 @@ function CreatePostForm() {
     console.log(title, description, image);
   }
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="create-post">
       <h1>Create a Post</h1>
       <label>Title:</label>
       <input
