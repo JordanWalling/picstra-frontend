@@ -247,3 +247,113 @@
     }
     export default CreatePostForm;
 ```
+
+## Test form, check the browsers console
+
+## Add image upload functionality to server
+
+---
+
+```
+    import { useState } from "react";
+    import "../CreatePostForm/CreatePostForm.scss";
+
+    function CreatePostForm() {
+    const [title, setTitle] = useState("");
+    const [desc, setDesc] = useState("");
+    const [image, setImage] = useState(null);
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("desc", desc);
+        formData.append("image", image);
+        try {
+        await fetch(process.env.REACT_APP_URL, {
+            method: "POST",
+            body: formData,
+        });
+        } catch (error) {
+        console.log(error);
+        }
+    }
+    return (
+        <form onSubmit={handleSubmit} className="create-post">
+        <h1>Create a Post</h1>
+        <label>Title:</label>
+        <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+        />
+        <label>Description:</label>
+        <input
+            type="text"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+        />
+        <label>Upload Image:</label>
+        <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+        />
+        <button>Submit</button>
+        </form>
+    );
+    }
+    export default CreatePostForm;
+```
+
+## Create AllPostsShow folder and AllPostsShow.js
+
+---
+
+```
+    import { useState, useEffect } from "react";
+
+    function AllPostsShow() {
+    return <div>AllPostsShow</div>;
+    }
+    export default AllPostsShow;
+```
+
+## Export from index.js inside pages folder
+
+---
+
+```
+    export { default as CreatePostPage } from "./CreatePost/CreatePostPage";
+    export { default as AllPostsShow } from "./AllPostsShow/AllPostsShow";
+```
+
+## Add posts route in App.js
+
+---
+
+```
+    import "./App.css";
+    import MainLayout from "./components/MainLayout/MainLayout";
+    import { CreatePostPage, AllPostsShow } from "./pages";
+    import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+    function App() {
+    return (
+        <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<MainLayout />}>
+            <Route index element={<h1>Home</h1>} />
+            <Route path="create-post" element={<CreatePostPage />} />
+            <Route path="posts" element={<AllPostsShow />} />
+            </Route>
+        </Routes>
+        </BrowserRouter>
+    );
+    }
+
+    export default App;
+
+```
+
+## Test Route in localhost

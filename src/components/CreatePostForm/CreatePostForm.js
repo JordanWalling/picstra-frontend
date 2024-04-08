@@ -1,13 +1,29 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../CreatePostForm/CreatePostForm.scss";
+
 function CreatePostForm() {
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [desc, setDesc] = useState("");
   const [image, setImage] = useState(null);
 
-  function handleSubmit(event) {
+  const navigate = useNavigate();
+
+  async function handleSubmit(event) {
     event.preventDefault();
-    console.log(title, description, image);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("desc", desc);
+    formData.append("image", image);
+    try {
+      await fetch(process.env.REACT_APP_URL, {
+        method: "POST",
+        body: formData,
+      });
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
     <form onSubmit={handleSubmit} className="create-post">
@@ -21,11 +37,15 @@ function CreatePostForm() {
       <label>Description:</label>
       <input
         type="text"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        value={desc}
+        onChange={(e) => setDesc(e.target.value)}
       />
       <label>Upload Image:</label>
-      <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => setImage(e.target.files[0])}
+      />
       <button>Submit</button>
     </form>
   );
